@@ -58,15 +58,14 @@ class Controller {
         if (!question) {
           res.status(404).json({ message: 'not found to update', question });
         } else {
-          title = req.body.title || question.title;
-          description = req.body.description || question.description;
-          creator = req.body.creator || question.creator;
-          upvotes = req.body.upvotes || question.upvotes;
-          downvotes = req.body.downvotes || question.downvotes;
+          updatedQuestion = question;
+          updatedQuestion.title = req.body.title || question.title;
+          updatedQuestion.description = req.body.description || question.description;
+          updatedQuestion.upvotes = req.body.upvotes || question.upvotes;
+          updatedQuestion.downvotes = req.body.downvotes || question.downvotes;
           return question.updateOne({
             title: req.body.title || question.title,
             description: req.body.description || question.description,
-            creator: req.body.creator || question.creator,
             upvotes: req.body.upvotes || question.upvotes,
             downvotes: req.body.downvotes || question.downvotes
           })
@@ -113,6 +112,24 @@ class Controller {
           res.status(404).json({ message: 'data empty', questions })
         } else {
           res.status(200).json({ message: 'data found', questions });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: 'internal server error', err });
+      })
+  }
+
+  static upvote(req, res) {
+    const decoded = jwt.verify(req.headers.token);
+    let obj = {};
+    
+    Question.findById(req.params.id)
+      .then(question => {
+        if (!question) {
+          res.status(404).json({ message: 'not found to upvote', question });
+        } else {
+          res.status(200).json({ message: 'found', question });
         }
       })
       .catch(err => {

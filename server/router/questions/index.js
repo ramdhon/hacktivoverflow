@@ -1,16 +1,18 @@
 const express = require('express');
-const products = express.Router();
-const ProductController = require('../../controllers/product');
+const questions = express.Router();
+const QuestionController = require('../../controllers/question');
 const authentication = require('../../middlewares/authentication');
-const adminAuthor = require('../../middlewares/adminAuthor');
-const upload = require('../../middlewares/gUpload');
+const authorizeAuthUser = require('../../middlewares/authorizeAuthUser');
 
-products.get('/', ProductController.all);
-products.post('/', authentication, adminAuthor, upload.multer.single('image'), upload.sendUploadToGCS, ProductController.create);
-products.get('/:id', ProductController.one);
-products.put('/:id', authentication, adminAuthor, upload.multer.single('image'), upload.sendUploadToGCS, ProductController.update);
-products.patch('/:id', authentication, adminAuthor, upload.multer.single('image'), upload.sendUploadToGCS, ProductController.update);
-products.delete('/:id', authentication, adminAuthor, ProductController.delete);
+questions.get('/', QuestionController.all);
+questions.post('/', authentication, QuestionController.create);
+questions.get('/:id', QuestionController.one);
+questions.put('/:id', authentication, authorizeAuthUser, QuestionController.update);
+questions.patch('/:id', authentication, authorizeAuthUser, QuestionController.update);
+questions.delete('/:id', authentication, authorizeAuthUser, QuestionController.delete);
+
+questions.post('/:id', authentication, QuestionController.upvote);
+questions.post('/:id', authentication, QuestionController.downvote);
 
 
-module.exports = products;
+module.exports = questions;
