@@ -14,12 +14,12 @@
             <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
           </li>
         </ul>
-        
+
         <div class="navbar-nav nav-item" v-show="!isLoggedIn">
           <li>
             <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
           </li>
-          <dd-login id="loginModal" @login="login" />
+          <dd-login id="loginModal" />
 
           <li>
             <a class="nav-link" href="#" data-toggle="modal" data-target="#registerModal">Register</a>
@@ -36,13 +36,14 @@
         </li>
       </div>
     </nav>
-    <router-view :isLoggedIn="isLoggedIn" />
+    <router-view />
   </div>
 </template>
 
 <script>
 import ddLogin from '@/components/Login.vue';
 import ddRegister from '@/components/Register.vue';
+import { mapState } from 'vuex';
 import Swal from '@/helpers/swal';
 
 export default {
@@ -52,9 +53,12 @@ export default {
     ddRegister,
   },
 
+  computed: mapState([
+      'isLoggedIn',
+    ]),
+
   data() {
-    return {  
-      isLoggedIn: false,
+    return {
     };
   },
 
@@ -67,13 +71,9 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem('token');
-      // this.$store.state.token = '';
-      this.isLoggedIn = false;
+      this.$store.dispatch('loginLogout', false);
       Swal.success('logut success');
     },
-    login() {
-      this.isLoggedIn = true;
-    }
   },
 };
 </script>

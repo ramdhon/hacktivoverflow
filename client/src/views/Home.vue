@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="container-fluid mt-4 ml-5">
+    <div class="container-fluid mt-4 pl-5">
       <div class="row">
         <div class="col-sm px-0" style="background-color:">
           <p class="text-right">
@@ -51,10 +51,19 @@
 
 <script>
 // @ is an alias to /src
+import { mapState } from 'vuex';
+
 export default {
   name: 'Home',
-  props: {
-    isLoggedIn: Boolean,
+
+  computed: {
+    ...mapState([
+      'isLoggedIn',
+    ]),
+  },
+
+  created() {
+    console.log('status ==>', this.$store.state.isLoggedIn);
   },
 };
 </script>

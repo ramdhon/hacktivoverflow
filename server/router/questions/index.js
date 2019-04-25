@@ -11,8 +11,8 @@ questions.put('/:id', authentication, authorizeAuthUser, QuestionController.upda
 questions.patch('/:id', authentication, authorizeAuthUser, QuestionController.update);
 questions.delete('/:id', authentication, authorizeAuthUser, QuestionController.delete);
 
-questions.post('/:id', authentication, QuestionController.upvote);
-questions.post('/:id', authentication, QuestionController.downvote);
+// questions.post('/:id/upvote', authentication, QuestionController.upvote);
+// questions.post('/:id/downvote', authentication, QuestionController.downvote);
 
 
 module.exports = questions;

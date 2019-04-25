@@ -33,15 +33,12 @@
 <script>
 import axios from '@/api/axios';
 import Swal from '@/helpers/swal';
-import { mapState } from 'vuex';
 
 export default {
   name: 'Login',
   props: {
     id: String,
   },
-
-  computed: mapState(['isLoggedIn']),
 
   data() {
     return {
@@ -63,8 +60,7 @@ export default {
           this.form.email = '';
           this.form.password = '';
           localStorage.setItem('token', data.token);
-          // this.$store.dispatch('login', isLoggedIn);
-          this.$emit('login');
+          this.$store.dispatch('loginLogout', true);
           Swal.success(data.message);
           // console.log(data);
         })

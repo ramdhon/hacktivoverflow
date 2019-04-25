@@ -8,13 +8,13 @@ export default new Vuex.Store({
     isLoggedIn: false,
   },
   mutations: {
-    login(state, payload) {
-      state.token = payload;
+    loginLogout(state, payload) {
+      state.isLoggedIn = payload;
     }
   },
   actions: {
-    login({ commit }, payload) {
-      commit('login', payload);
+    loginLogout({ commit }, payload) {
+      commit('loginLogout', payload);
     } 
   },
 });
