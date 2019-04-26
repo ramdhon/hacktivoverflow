@@ -4,7 +4,7 @@ const jwt = require('../helpers/jwt');
 class Controller {
   static all(req, res) {
     Question.find({})
-      .populate('User')
+      .populate('creator')
       .then(questions => {
         if (questions.length === 0) {
           res.status(404).json({ message: 'data empty', questions })
@@ -20,7 +20,7 @@ class Controller {
   
   static one(req, res) {
     Question.findById(req.params.id)
-      .populate('User')
+      .populate('creator')
       .then(question => {
         if (!question) {
           res.status(404).json({ message: 'not found', question });
@@ -35,12 +35,14 @@ class Controller {
   }
 
   static create(req, res) {
+    let decoded = jwt.verify(req.headers.token);
+
     Question.create({
       title: req.body.title,
       description: req.body.description,
-      creator: req.body.creator,
-      upvotes: req.body.upvotes,
-      downvotes: req.body.downvotes
+      creator: req.body.creator || decoded.id,
+      upvotes: [],
+      downvotes: []
     })
       .then(newQuestion => {
         res.status(201).json({ message: 'successfully created', newQuestion });
@@ -85,7 +87,7 @@ class Controller {
     Question.findById(req.params.id)
       .then(question => {
         if (!question) {
-          res.status(200).json({ message: 'not found to delete', question });
+          res.status(404).json({ message: 'not found to delete', question });
         } else {
           deletedQuestion = question;
           return question.delete()
@@ -106,7 +108,7 @@ class Controller {
     Question.find({
       creator: decoded.id
     })
-      .populate('User')
+      .populate('creator')
       .then(questions => {
         if (questions.length === 0) {
           res.status(404).json({ message: 'data empty', questions })

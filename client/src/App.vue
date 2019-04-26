@@ -64,7 +64,7 @@ export default {
 
   created() {
     if (localStorage.token) {
-      this.isLoggedIn = true;
+      this.$store.dispatch('loginLogout', true);
     }
   },
 
